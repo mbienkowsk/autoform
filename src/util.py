@@ -49,7 +49,7 @@ def assign_question_type(question_card: WebElement) -> QuestionType:
         return QuestionType.LONG_TEXT
 
     radio_input_present = len(
-        question_card.find_elements(by=By.CLASS_NAME, value=GOOGLE_FORM_RADIO_INPUT_CLASS))
+        question_card.find_elements(by=By.CLASS_NAME, value=GOOGLE_FORM_RADIO_OPTION_CLASS))
     if radio_input_present:
         return QuestionType.RADIO
 
