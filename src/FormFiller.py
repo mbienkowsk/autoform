@@ -2,21 +2,28 @@ from typing import Optional
 from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
-from constants import *
-from util import slow_down, concatenate_classname, Question
+from src.constants import *
+from src.util import delay, concatenate_classname, Question
 
 
 class FormFiller(Firefox):
     """Utility for automating the process of filling forms.
     Extends the selenium's firefox driver, because chrome bad"""
 
-    @slow_down(T)
+    @delay(T)
     def __find_element(self, by=By.ID, value: Optional[str] = None) -> WebElement:
+        """Delays the find_element operation for debugging purposes"""
         return super().find_element(by, value)
 
-    @slow_down(T)
+    @delay(T)
     def __find_elements(self, by=By.ID, value: Optional[str] = None) -> list[WebElement]:
+        """Delays the find_element operation for debugging purposes"""
         return super().find_elements(by, value)
+
+    @delay(T)
+    def click(self, element: WebElement) -> None:
+        """Delays the element clicking operation for debugging purposes"""
+        return element.click()
 
     def get_all_questions(self) -> list[Question]:
         """Finds all questions in a form"""
@@ -46,6 +53,5 @@ class FormFiller(Firefox):
 
     def submit(self) -> None:
         """Submits the form"""
-        # todo: return a value?
         submit_button = self.__find_submit_button()
-        submit_button.click()
+        return self.click(submit_button)

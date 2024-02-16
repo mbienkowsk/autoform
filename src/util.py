@@ -18,7 +18,7 @@ class Question:
     # todo: input_type for selects and text inputs
 
 
-def slow_down(t: float):
+def delay(t: float):
     """Delays the function's return by t seconds, used to debug the formfiller"""
 
     def inner(func):
