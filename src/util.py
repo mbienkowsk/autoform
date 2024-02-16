@@ -3,7 +3,7 @@ from time import sleep
 from enum import Enum
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
-from src.constants import GOOGLE_FORM_RADIO_INPUT_CLASS, GOOGLE_FORM_SELECT_CLASS
+from src.classnames import GOOGLE_FORM_RADIO_INPUT_CLASS, GOOGLE_FORM_SELECT_CLASS
 from src.errors import InvalidQuestionTypeError
 
 """Various utilities"""
@@ -32,15 +32,10 @@ def delay(t: float):
     return inner
 
 
-def concatenate_classname(classname: str):
-    """Concatenates multiple css classes using dots"""
-    return '.'.join(classname.split())
-
-
 def assign_question_type(question_card: WebElement) -> QuestionType:
     """Based on the contents of a question card, assigns it a type"""
     select_present = len(
-        question_card.find_elements(by=By.CLASS_NAME, value=concatenate_classname(GOOGLE_FORM_SELECT_CLASS)))
+        question_card.find_elements(by=By.CLASS_NAME, value=GOOGLE_FORM_SELECT_CLASS))
     if select_present:
         return QuestionType.SELECT
 
@@ -49,7 +44,7 @@ def assign_question_type(question_card: WebElement) -> QuestionType:
         return QuestionType.LONG_TEXT
 
     radio_input_present = len(
-        question_card.find_elements(by=By.CLASS_NAME, value=concatenate_classname(GOOGLE_FORM_RADIO_INPUT_CLASS)))
+        question_card.find_elements(by=By.CLASS_NAME, value=GOOGLE_FORM_RADIO_INPUT_CLASS))
     if radio_input_present:
         return QuestionType.RADIO
 
