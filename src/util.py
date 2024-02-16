@@ -3,7 +3,7 @@ from time import sleep
 from enum import Enum
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
-from src.classnames import GOOGLE_FORM_RADIO_INPUT_CLASS, GOOGLE_FORM_SELECT_CLASS
+from src.classnames import *
 from src.errors import InvalidQuestionTypeError
 
 """Various utilities"""
@@ -15,6 +15,7 @@ class QuestionType(Enum):
     LONG_TEXT = 1
     RADIO = 2
     SELECT = 3
+    CHECKBOX = 4
 
 
 def delay(t: float):
@@ -34,6 +35,10 @@ def delay(t: float):
 
 def assign_question_type(question_card: WebElement) -> QuestionType:
     """Based on the contents of a question card, assigns it a type"""
+    checkbox_present = len(question_card.find_elements(by=By.CLASS_NAME, value=GOOGLE_FORM_CHECKBOX_CONTAINER_CLASS))
+    if checkbox_present:
+        return QuestionType.CHECKBOX
+
     select_present = len(
         question_card.find_elements(by=By.CLASS_NAME, value=GOOGLE_FORM_SELECT_CLASS))
     if select_present:
