@@ -40,7 +40,7 @@ def assign_question_type(question_card: WebElement) -> QuestionType:
         return QuestionType.CHECKBOX
 
     select_present = len(
-        question_card.find_elements(by=By.CLASS_NAME, value=GOOGLE_FORM_SELECT_CLASS))
+        question_card.find_elements(by=By.CLASS_NAME, value=GOOGLE_FORM_OPEN_CLOSE_SELECT_CLASS))
     if select_present:
         return QuestionType.SELECT
 
