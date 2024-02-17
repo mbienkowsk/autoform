@@ -181,18 +181,22 @@ class SelectQuestion(CloseEndedQuestion):
         """Creates a dictionary with pairs {answer_string: answer_web_element},
         where clicking a given element results in selecting the answer in the key
         """
-        self.open_dropdown()
         # since there is 2*n divs with the same option class, of which only n are clickable for n answers, find the
         # parent of the clickable ones
-        input_parent = self.card_element.find_element(by=By.CLASS_NAME, value=GOOGLE_FORM_SELECT_OPEN_DROPDOWN)
+        input_parent = self.card_element.find_element(by=By.CLASS_NAME,
+                                                      value=GOOGLE_FORM_SELECT_DROPDOWN_OPTIONS_PARENT_CLASS)
         option_elements = input_parent.find_elements(by=By.CLASS_NAME, value=GOOGLE_FORM_SELECT_OPTION_CLASS)
         mapping = {element.accessible_name: element for element in option_elements if element.text != "Other:"}
         return mapping
 
+    def refresh_answer_mapping(self):
+        """Since opening and closing the dropdown removes the elements referenced in the self.options
+        dictionary, these references have to be refreshed on every open operation"""
+        self.options = self.create_answer_mapping()
+
     def select_option(self, option: str) -> None:
         """Makes the dropdown visible and selects the chosen option"""
-        time.sleep(.25)
+        time.sleep(.25)  # in the event where the dropdown was just closed, wait for the opener to reappear in the DOM
         self.open_dropdown()
+        self.refresh_answer_mapping()
         super().select_option(option)
-
-    # TODO: find separator, implement close_dropdown, clean it up
