@@ -5,10 +5,10 @@ from selenium.webdriver.common.by import By
 from src.classnames import *
 from typing import Optional
 from selenium.common.exceptions import NoSuchElementException
-
 from src.constants import T
 from src.errors import InvalidAnswerError
 from src.util import delay
+import time
 
 
 class Question(ABC):
@@ -147,18 +147,35 @@ class SelectQuestion(CloseEndedQuestion):
     """Represents the dropdown select question"""
 
     def __init__(self, card_elem: WebElement):
-        self.dropdown = SelectQuestion.find_dropdown(card_elem)
+        self.card_element = card_elem
+        self.__dropdown_opener = self.find_dropdown_opener()
+        self.open_dropdown()
         super().__init__(card_elem)
+        self.__dropdown_closer = self.find_dropdown_closer()
+        self.close_dropdown()
         self.multi_choice = False
 
-    @staticmethod
-    def find_dropdown(card_element: WebElement) -> WebElement:
-        """Finds the dropdown in a given select question card element"""
-        return card_element.find_element(by=By.CLASS_NAME, value=GOOGLE_FORM_SELECT_CLASS)
+    def find_dropdown_opener(self) -> WebElement:
+        """Finds the dropdown in a given select question card element.
+        Has to be found before calling __init__ since it needs to be open
+        to bind correct elements to answers"""
+        return self.card_element.find_element(by=By.CLASS_NAME, value=GOOGLE_FORM_OPEN_CLOSE_SELECT_CLASS)
 
+    def find_dropdown_closer(self):
+        """Finds the div which needs to be clicked to close the dropdown without answering"""
+        parent = self.card_element.find_element(by=By.CLASS_NAME,
+                                                value=GOOGLE_FORM_SELECT_DROPDOWN_OPTIONS_PARENT_CLASS)
+        return parent.find_element(by=By.CLASS_NAME, value=GOOGLE_FORM_OPEN_CLOSE_SELECT_CLASS)
+
+    @delay(T)
     def open_dropdown(self):
         """Clicks the dropdown to open it"""
-        self.dropdown.click()
+        self.__dropdown_opener.click()
+
+    @delay(T)
+    def close_dropdown(self):
+        """Closes the dropdown without answering the question"""
+        self.__dropdown_closer.click()
 
     def create_answer_mapping(self) -> dict[str, WebElement]:
         """Creates a dictionary with pairs {answer_string: answer_web_element},
@@ -174,7 +191,8 @@ class SelectQuestion(CloseEndedQuestion):
 
     def select_option(self, option: str) -> None:
         """Makes the dropdown visible and selects the chosen option"""
-        # self.open_dropdown()
+        time.sleep(.25)
+        self.open_dropdown()
         super().select_option(option)
 
     # TODO: find separator, implement close_dropdown, clean it up
