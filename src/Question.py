@@ -7,6 +7,7 @@ from typing import Optional
 from selenium.common.exceptions import NoSuchElementException
 
 from src.constants import T
+from src.errors import InvalidAnswerError
 from src.util import delay
 
 
@@ -85,8 +86,9 @@ class CloseEndedQuestion(Question):
 
     def __init__(self, card_elem: WebElement):
         super().__init__(card_elem)
-        self.input_elements: dict[str, WebElement] = self.create_answer_mapping()
-        self.extra_input: WebElement = self.find_text_input()  # targets the optional "Other: " field
+        self.options: dict[str, WebElement] = self.create_answer_mapping()
+        self.other_text_input: WebElement = self.find_text_input()  # targets the optional "Other: " field
+        self.multi_answer: bool
 
     @abstractmethod
     def create_answer_mapping(self) -> dict[str, WebElement]:
@@ -94,13 +96,32 @@ class CloseEndedQuestion(Question):
         where clicking a given element results in locking in the answer in the key"""
         ...
 
+    @delay(T)
+    def answer_other_question(self, answer: str):
+        """Fills in the optional "other" field with the provided answer. The field is automatically
+        selected after an answer is entered"""
+        if self.other_text_input is None:
+            raise NoSuchElementException("This question does not contain an open-ended part")
+        self.other_text_input.send_keys(answer)
+
 
 class RadioQuestion(CloseEndedQuestion):
     """Represents the single-answer radio input question"""
 
     def __init__(self, card_elem: WebElement):
         super().__init__(card_elem)
+        self.multi_answer = False
 
     def create_answer_mapping(self) -> dict[str, WebElement]:
-        # todo
-        ...
+        """Creates a dictionary with pairs {answer_string: answer_web_element},
+        where clicking a given element results in locking in the answer in the key"""
+        option_elements = self.card_element.find_elements(by=By.CLASS_NAME, value=GOOGLE_FORM_RADIO_OPTION_CLASS)
+        mapping = {element.text: element for element in option_elements if element.text != "Other:"}
+        return mapping
+
+    @delay(T)
+    def select_option(self, option: str):
+        """Selects the chosen option"""
+        if option not in list(self.options.keys()):
+            raise InvalidAnswerError("Provided answer is not a valid one for this multi-choice question!")
+        self.options[option].click()
