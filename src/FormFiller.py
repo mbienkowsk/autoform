@@ -27,11 +27,21 @@ class FormFiller(Firefox):
         """Delays the element clicking operation for debugging purposes"""
         return element.click()
 
+    def get_all_question_cards(self) -> list[WebElement]:
+        # todo: probably delete later
+        return self.__find_elements_by_classname(GOOGLE_FORM_QUESTION_CARD_CLASS)
+
     def get_all_questions(self) -> list[Question]:
-        """Finds all questions in a form"""
-        question_cards = self.__find_elements_by_classname(GOOGLE_FORM_QUESTION_CARD_CLASS)
-        # todo: implement
-        return []
+        """Finds all questions in a form and creates corresponding instances"""
+        question_cards = self.get_all_question_cards()
+        constructor_from_type = {
+            QuestionType.SHORT_TEXT: ShortTextQuestion,
+            QuestionType.LONG_TEXT: LongTextQuestion,
+            QuestionType.RADIO: RadioQuestion,
+            QuestionType.SELECT: SelectQuestion,
+            QuestionType.CHECKBOX: CheckboxQuestion
+        }
+        return [constructor_from_type[assign_question_type(card)](card) for card in question_cards]
 
     def __find_elements_by_classname(self, classname: str) -> list[WebElement]:
         """Finds elements by the given classname, basically a wrapper which takes care of
