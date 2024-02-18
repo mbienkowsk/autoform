@@ -1,21 +1,12 @@
 import functools
 from time import sleep
-from enum import Enum
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 from src.classnames import *
+from src.enums import QuestionType
 from src.errors import InvalidQuestionTypeError
 
 """Various utilities"""
-
-
-class QuestionType(Enum):
-    """Possible question variants in a google form"""
-    SHORT_TEXT = 0
-    LONG_TEXT = 1
-    RADIO = 2
-    SELECT = 3
-    CHECKBOX = 4
 
 
 def delay(t: float):
