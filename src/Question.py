@@ -46,6 +46,12 @@ class Question(ABC):
         text_inputs = list(filter(lambda elem: elem.get_attribute("type") == "text", inputs))
         return None if not text_inputs else text_inputs[0]
 
+    @abstractmethod
+    @delay(T)
+    def answer(self, answer: str) -> None:
+        """Answers the question"""
+        ...
+
 
 class OpenEndedQuestion(Question):
     """Question which requires a text-based answer by filling in a textinput or a textarea"""
@@ -60,8 +66,7 @@ class OpenEndedQuestion(Question):
         """Finds the input element, where the answer should be entered"""
         ...
 
-    @delay(T)
-    def enter_answer(self, answer: str) -> None:
+    def answer(self, answer: str) -> None:
         """Fills in the question's input element with the provided answer"""
         self.input_element.send_keys(answer)
 
@@ -104,12 +109,11 @@ class CloseEndedQuestion(Question):
             raise NoSuchElementException("This question does not contain an open-ended part")
         self.other_text_input.send_keys(answer)
 
-    @delay(T)
-    def select_option(self, option: str) -> None:
-        """Selects the chosen option"""
-        if option not in list(self.options.keys()):
+    def answer(self, answer: str) -> None:
+        """Selects the chosen answer"""
+        if answer not in list(self.options.keys()):
             raise InvalidAnswerError("Provided answer is not a valid one for this multi-choice question!")
-        self.options[option].click()
+        self.options[answer].click()
 
 
 class RadioQuestion(CloseEndedQuestion):
@@ -194,9 +198,9 @@ class SelectQuestion(CloseEndedQuestion):
         dictionary, these references have to be refreshed on every open operation"""
         self.options = self.create_answer_mapping()
 
-    def select_option(self, option: str) -> None:
+    def answer(self, option: str) -> None:
         """Makes the dropdown visible and selects the chosen option"""
         time.sleep(.25)  # in the event where the dropdown was just closed, wait for the opener to reappear in the DOM
         self.open_dropdown()
         self.refresh_answer_mapping()
-        super().select_option(option)
+        super().answer(option)

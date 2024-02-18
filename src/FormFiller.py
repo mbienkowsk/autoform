@@ -3,22 +3,23 @@ from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from src.constants import *
-from src.util import delay
+from src.util import delay, assign_question_type
+from src.enums import QuestionType
 from src.classnames import GOOGLE_FORM_QUESTION_CARD_CLASS, GOOGLE_FORM_SUBMIT_BUTTON_CLASS
-from src.Question import Question
+from src.Question import Question, ShortTextQuestion, LongTextQuestion, RadioQuestion, SelectQuestion, CheckboxQuestion
 
 
 class FormFiller(Firefox):
     """Utility for automating the process of filling forms.
     Extends the selenium's firefox driver, because chrome bad"""
 
-    @delay(T)
-    def __find_element(self, by=By.ID, value: Optional[str] = None) -> WebElement:
+    @delay(0)
+    def find_element(self, by=By.ID, value: Optional[str] = None) -> WebElement:
         """Delays the find_element operation for debugging purposes"""
         return super().find_element(by, value)
 
-    @delay(T)
-    def __find_elements(self, by=By.ID, value: Optional[str] = None) -> list[WebElement]:
+    @delay(0)
+    def find_elements(self, by=By.ID, value: Optional[str] = None) -> list[WebElement]:
         """Delays the find_element operation for debugging purposes"""
         return super().find_elements(by, value)
 
@@ -29,7 +30,7 @@ class FormFiller(Firefox):
 
     def get_all_question_cards(self) -> list[WebElement]:
         # todo: probably delete later
-        return self.__find_elements_by_classname(GOOGLE_FORM_QUESTION_CARD_CLASS)
+        return self.find_elements(by=By.CLASS_NAME, value=GOOGLE_FORM_QUESTION_CARD_CLASS)
 
     def get_all_questions(self) -> list[Question]:
         """Finds all questions in a form and creates corresponding instances"""
@@ -43,22 +44,12 @@ class FormFiller(Firefox):
         }
         return [constructor_from_type[assign_question_type(card)](card) for card in question_cards]
 
-    def __find_elements_by_classname(self, classname: str) -> list[WebElement]:
-        """Finds elements by the given classname, basically a wrapper which takes care of
-        choosing the correct By and formatting the classname"""
-        return self.find_elements(by=By.CLASS_NAME, value=classname)
-
-    def find_element_by_classname(self, classname: str) -> WebElement:
-        """Finds an element by the given classname, basically a wrapper which takes care of
-        choosing the correct By and formatting the classname"""
-        return self.find_element(by=By.CLASS_NAME, value=classname)
-
-    def __find_submit_button(self) -> WebElement:
+    def find_submit_button(self) -> WebElement:
         """Finds the form's submit button"""
-        # todo: error handling
-        return self.find_element_by_classname(GOOGLE_FORM_SUBMIT_BUTTON_CLASS)
+        # todo: error handling?
+        return self.find_element(by=By.CLASS_NAME, value=GOOGLE_FORM_SUBMIT_BUTTON_CLASS)
 
     def submit(self) -> None:
         """Submits the form"""
-        submit_button = self.__find_submit_button()
+        submit_button = self.find_submit_button()
         return self.click(submit_button)
