@@ -1,5 +1,3 @@
-import functools
-from time import sleep
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 from src.classnames import *
@@ -7,21 +5,6 @@ from src.enums import QuestionType
 from src.errors import InvalidQuestionTypeError
 
 """Various utilities"""
-
-
-def delay(t: float):
-    """Delays the function's return by t seconds, used to debug the formfiller"""
-
-    def inner(func):
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            rv = func(*args, **kwargs)
-            sleep(t)
-            return rv
-
-        return wrapper
-
-    return inner
 
 
 def assign_question_type(question_card: WebElement) -> QuestionType:
