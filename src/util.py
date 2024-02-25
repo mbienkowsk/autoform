@@ -1,12 +1,14 @@
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 from src.classnames import *
+from src.decorators import timer
 from src.enums import QuestionType
 from src.errors import InvalidQuestionTypeError
 
 """Various utilities"""
 
 
+@timer
 def assign_question_type(question_card: WebElement) -> QuestionType:
     """Based on the contents of a question card, assigns it a type"""
     checkbox_present = len(question_card.find_elements(by=By.CLASS_NAME, value=GOOGLE_FORM_CHECKBOX_CONTAINER_CLASS))

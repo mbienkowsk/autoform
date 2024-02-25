@@ -1,6 +1,7 @@
 from src.FormFiller import FormFiller
 from src.constants import TEST_FORM
-from src.util import assign_question_type, QuestionType
+from src.util import assign_question_type
+from src.enums import QuestionType
 
 
 def test_assigns_correct_types():

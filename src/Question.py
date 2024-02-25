@@ -7,7 +7,7 @@ from typing import Optional
 from selenium.common.exceptions import NoSuchElementException
 from src.constants import T
 from src.errors import InvalidAnswerError
-from src.util import delay
+from src.decorators import delay
 import time
 
 
