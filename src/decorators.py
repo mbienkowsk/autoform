@@ -1,6 +1,7 @@
 import functools
 from time import sleep
 from time import perf_counter
+from loguru import logger
 
 
 def delay(t: float):
@@ -19,12 +20,13 @@ def delay(t: float):
 
 
 def timer(func):
+    """Measures the time taken by the execution of a function"""
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         before = perf_counter()
         rv = func(*args, **kwargs)
         after = perf_counter()
-        print(f"{func.__name__} took {after - before:02f} seconds.")
+        logger.info(f"{func.__name__} took {after - before:02f} seconds.")
         return rv
 
     return wrapper
