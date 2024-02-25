@@ -26,6 +26,7 @@ class QuestionTopic(Enum):
     DIET = 8,
     CLUB_MEMBERSHIP = 9,
     FACEBOOK_PROFILE = 10,
+    PLACE_TO_SLEEP = 11,
 
 
 class PersonRegardedByQuestion(Enum):
