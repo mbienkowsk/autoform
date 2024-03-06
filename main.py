@@ -1,6 +1,6 @@
 from loguru import logger
-from FormFiller import FormFiller
-from constants import FORM1, FORM2, FORM3
+from src.FormFiller import FormFiller
+from src.constants import FORM1, FORM2, FORM3
 
 def main():
     with FormFiller() as driver:
