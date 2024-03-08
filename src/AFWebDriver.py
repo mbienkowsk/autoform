@@ -10,9 +10,8 @@ from src.classnames import GOOGLE_FORM_QUESTION_CARD_CLASS, GOOGLE_FORM_SUBMIT_B
 from src.Question import Question, ShortTextQuestion, LongTextQuestion, RadioQuestion, SelectQuestion, CheckboxQuestion
 
 
-class FormFiller(Firefox):
-    """Utility for automating the process of filling forms.
-    Extends the selenium's firefox driver, because chrome bad"""
+class AFWebDriver(Firefox):
+    """Extension of the selenium's webdriver for automating form completion"""
 
     @delay(0)
     def find_element(self, by=By.ID, value: Optional[str] = None) -> WebElement:

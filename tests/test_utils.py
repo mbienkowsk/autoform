@@ -1,11 +1,11 @@
-from src.FormFiller import FormFiller
+from src.AFWebDriver import AFWebDriver
 from src.constants import TEST_FORM
 from src.util import assign_question_type
 from src.enums import QuestionType
 
 
 def test_assigns_correct_types():
-    with FormFiller() as driver:
+    with AFWebDriver() as driver:
         driver.get(TEST_FORM)
         cards = driver.get_all_question_cards()
         assert len(cards) == 5
