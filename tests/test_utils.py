@@ -1,7 +1,7 @@
-from src.AFWebDriver import AFWebDriver
-from src.constants import TEST_FORM
-from src.util import assign_question_type
-from src.enums import QuestionType
+from src.completion.AFWebDriver import AFWebDriver
+from src.completion.constants import TEST_FORM
+from src.completion.util import assign_question_type
+from src.completion.enums import QuestionType
 
 
 def test_assigns_correct_types():

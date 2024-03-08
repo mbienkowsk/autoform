@@ -1,9 +1,9 @@
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
-from src.classnames import *
+from src.matching.classnames import *
 from src.decorators import timer
-from src.enums import QuestionType
-from src.errors import InvalidQuestionTypeError
+from src.completion.enums import QuestionType
+from src.completion.errors import InvalidQuestionTypeError
 
 """Various utilities"""
 

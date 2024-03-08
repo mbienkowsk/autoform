@@ -9,8 +9,8 @@ from dataclasses import dataclass
 class QuestionClassification:
     """Combines the enums defined to describe a question's semantic meaning.
     Based on the QuestionClassification, an answer is chosen"""
-    topic: QuestionTopic
-    person: PersonRegardedByQuestion
+    topic: QuestionTopic | None
+    person: PersonRegardedByQuestion | None
 
 
 TEAM_NAME_KEYPHRASES = [
@@ -118,6 +118,12 @@ REGARDS_FIRST_PERSON_KEYPHRASES = [
     "pierwszą osobę"  # todo: regex
 ]
 
+REGARDS_SECOND_PERSON_KEYPHRASES = [
+    "druga osoba",
+    "drugiej osoby",
+    "drugą osobę"
+]
+
 # --------------------------------------------------------------
 
 
@@ -125,38 +131,51 @@ EMAIL_ADDRESS_FIRST_PERSON_QUESTIONS = [
     "adres email pierwszej osoby",
     "adres e-mail pierwszej osoby",
 ]
+EMAIL_ADDRESS_FIRST_PERSON_CLASSIFICATION = QuestionClassification(QuestionTopic.EMAIL_ADDRESS,
+                                                                   PersonRegardedByQuestion.PERSON_ONE)
 
 EMAIL_ADDRESS_SECOND_PERSON_QUESTIONS = [
     "adres email drugiej osoby",
     "adres e-mail drugiej osoby",
 ]
+EMAIL_ADDRESS_SECOND_PERSON_CLASSIFICATION = QuestionClassification(QuestionTopic.EMAIL_ADDRESS,
+                                                                    PersonRegardedByQuestion.PERSON_TWO)
 
 DIET_FIRST_PERSON_QUESTIONS = [
     "preferencje żywieniowe pierwszej osoby",  # todo: regex - startswith?
 ]
+DIET_FIRST_PERSON_CLASSIFICATION = QuestionClassification(QuestionTopic.DIET, PersonRegardedByQuestion.PERSON_ONE)
 
 DIET_SECOND_PERSON_QUESTIONS = [
     "preferencje żywieniowe drugiej osoby",  # todo: regex - startswith?
 ]
+DIET_SECOND_PERSON_CLASSIFICATION = QuestionClassification(QuestionTopic.DIET, PersonRegardedByQuestion.PERSON_TWO)
 
 CLUB_MEMBERSHIP_FIRST_PERSON_QUESTIONS = [
     "przynależność klubowa pierwszej osoby"
     "przynależność instytucjonalna pierwszej osoby"
 ]
+CLUB_MEMBERSHIP_FIRST_PERSON_CLASSIFICATION = QuestionClassification(QuestionTopic.CLUB_MEMBERSHIP,
+                                                                     PersonRegardedByQuestion.PERSON_ONE)
 
 CLUB_MEMBERSHIP_SECOND_PERSON_QUESTIONS = [
     "przynależność klubowa drugiej osoby"
     "przynależność instytucjonalna drugiej osoby"
 ]
+CLUB_MEMBERSHIP_SECOND_PERSON_CLASSIFICATION = QuestionClassification(QuestionTopic.CLUB_MEMBERSHIP,
+                                                                      PersonRegardedByQuestion.PERSON_TWO)
 
 PLACE_TO_SLEEP_FIRST_PERSON_QUESTIONS = [
     "nocleg w przypadku pierwszej osoby"
 ]
+PLACE_TO_SLEEP_FIRST_PERSON_CLASSIFICATION = QuestionClassification(QuestionTopic.PLACE_TO_SLEEP,
+                                                                    PersonRegardedByQuestion.PERSON_ONE)
 
 PLACE_TO_SLEEP_SECOND_PERSON_QUESTIONS = [
     "nocleg w przypadku drugiej osoby"
 ]
+PLACE_TO_SLEEP_SECOND_PERSON_CLASSIFICATION = QuestionClassification(QuestionTopic.PLACE_TO_SLEEP,
+                                                                     PersonRegardedByQuestion.PERSON_TWO)
 
 QUESTIONS_AND_KEYPHRASES_MAPPED = {
-
 }

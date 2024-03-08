@@ -2,11 +2,11 @@ from selenium.webdriver.remote.webelement import WebElement
 from abc import ABC, abstractmethod
 from loguru import logger
 from selenium.webdriver.common.by import By
-from src.classnames import *
+from src.matching.classnames import *
 from typing import Optional
 from selenium.common.exceptions import NoSuchElementException
-from src.constants import T
-from src.errors import InvalidAnswerError
+from src.completion.constants import T
+from src.completion.errors import InvalidAnswerError
 from src.decorators import delay
 import time
 

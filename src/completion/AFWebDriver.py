@@ -2,12 +2,12 @@ from typing import Optional
 from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
-from src.constants import *
-from src.util import assign_question_type
+from src.completion.constants import *
+from src.completion.util import assign_question_type
 from src.decorators import delay
-from src.enums import QuestionType
-from src.classnames import GOOGLE_FORM_QUESTION_CARD_CLASS, GOOGLE_FORM_SUBMIT_BUTTON_CLASS
-from src.Question import Question, ShortTextQuestion, LongTextQuestion, RadioQuestion, SelectQuestion, CheckboxQuestion
+from src.completion.enums import QuestionType
+from src.matching.classnames import GOOGLE_FORM_QUESTION_CARD_CLASS, GOOGLE_FORM_SUBMIT_BUTTON_CLASS
+from src.completion.Question import Question, ShortTextQuestion, LongTextQuestion, RadioQuestion, SelectQuestion, CheckboxQuestion
 
 
 class AFWebDriver(Firefox):

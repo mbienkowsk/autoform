@@ -1,6 +1,7 @@
 from loguru import logger
-from src.AFWebDriver import AFWebDriver
-from src.constants import FORM1, FORM2, FORM3
+from src.completion.AFWebDriver import AFWebDriver
+from src.completion.constants import FORM1
+
 
 def main():
     with AFWebDriver() as driver:
